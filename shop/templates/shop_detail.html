@@ -28,6 +28,16 @@
                         </div>
                         <p>{{ product.description }}</p>
                         <h2><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h2>
+                        <form action="{% url "cart:cart_push" product.id %}" method="post">
+                            {% csrf_token %}
+                            {% bootstrap_form cartform %}
+                            {% buttons %}
+                                <button type="submit" class="btn btn-success">
+                                    <span class="glyphicon glyphicon-shopping-cart"></span>加入購物車
+                                </button>
+                            {% endbuttons %}
+                        </form>
+
                         <p></p>
                     </div>
                 </div>

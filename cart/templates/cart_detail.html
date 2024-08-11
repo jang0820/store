@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bootstrap3 %}
+{% block title %}
+    購物車
+{% endblock %}
+
+{% block content %}
+    <h1>購物車</h1>
+
+    <div class="row">
+        <div class="col-sm-12 col-md-10 col-md-offset-1">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>商品</th>
+                    <th class="text-center">數量</th>
+                    <th class="text-center">商品價格</th>
+                    <th class="text-center">商品總價</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in cart %}
+                    {% with product=item.product %}
+                        <tr>
+                            <td class="col-sm-6 col-md-4">
+                                <div class="media">
+                                    <img class="media-object thumbnail pull-left"
+                                        src="{% if product.image %}{{ product.image.url }}
+                                             {% else %}{% static "img/product.png" %}{% endif %}"
+                                             style="width: 72px; height: 72px;">
+                                    <div class="media-body">
+                                        <h4>{{ product.name }}</h4>
+                                        <span>狀態: </span><span class="text-info"><strong>有存貨</strong></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-sm-2 col-md-2" style="text-align: center">
+                                <form class="form-inline" action="{% url "cart:cart_push" product.id %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="form-group">
+                                    {% bootstrap_field item.num_form.num show_label=False %}
+                                    </div>
+                                    <div class="form-group">
+                                    {% buttons %}
+                                        <button type="submit" class="btn btn-success">
+                                            更新
+                                        </button>
+                                    {% endbuttons %}
+                                    </div>
+                                </form>
+                            </td>
+
+                            <td class="col-sm-1 col-md-1 text-center"><strong>${{ item.price }}</strong></td>
+                            <td class="col-sm-1 col-md-1 text-center"><strong>${{ item.tprice }}</strong></td>
+
+                            <td class="col-sm-1 col-md-1">
+                                <a href="{% url "cart:cart_pop" product.id %}" class="btn btn-danger">
+                                    <i class="glyphicon glyphicon-trash" aria-hidden="true"></i> 刪除
+                                </a>
+                            </td>
+                        </tr>
+                    {% endwith %}
+                {% endfor %}
+                <tr>
+                    <td>  </td>
+                    <td>  </td>
+                    <td>  </td>
+                    <td><h3>總金額</h3></td>
+                    <td class="text-right"><h3><strong>${{ cart.get_tprice }}</strong></h3></td>
+                </tr>
+                <tr>
+                    <td>  </td>
+                    <td colspan="2"><h3>
+                        <a href="{% url "shop:product_list_all" %}">
+                          <i class="glyphicon glyphicon-shopping-cart"></i>繼續購物
+                        </a>
+                        </h3>
+                    </td>
+                    <td colspan="2">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}

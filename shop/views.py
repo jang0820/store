@@ -1,8 +1,10 @@
 #參考https://github.com/PacktPublishing/Django-4-by-example
 
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView
+
+from cart.forms import CartForm
 from .models import Category, Product
+from django.views.generic import ListView, DetailView
 
 class ProductListView(ListView):
     model = Product
@@ -31,4 +33,6 @@ class ProductDetailView(DetailView):
         product = get_object_or_404(Product, id=id, slug=slug, available=True)
         context = super().get_context_data(**kwargs)
         context["product"] = product
+        cartform = CartForm()
+        context["cartform"] = cartform
         return context
