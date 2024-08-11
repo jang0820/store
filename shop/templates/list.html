@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if cat %}類別：{{ cat.name }}{% else %}所有商品{% endif %}
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-3">
+            <h3>商品類別</h3>
+            <ul class="nav nav-pills nav-stacked">
+                <li {% if not cat %}class="active"{% endif %}>
+                    <a href="{% url "shop:product_list_all" %}">全部商品</a></li>
+                {% for c in cats %}
+                    <li {% if cat.slug == c.slug %}class="active"{% endif %}>
+                        <a href="{{ c.get_absolute_url }}">{{ c.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="col-md-9">
+            <h2>{% if cat %}{{ cat.name }}{% else %}全部商品{% endif %}</h2>
+            <div class="row">
+                {% for product in products %}
+                    <div class="col-md-4">
+                        <div class="thumbnail">
+                            <a href="{{ product.get_absolute_url }}">
+                                <img src="{% if product.image %}{{ product.image.url }}
+                                          {% else %}{% static "img/product.png" %} {% endif %}">
+                            </a>
+                            <a href="{{ product.get_absolute_url }}">{{ product.name }}</a><br>
+                            ${{ product.price }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
