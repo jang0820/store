@@ -5,10 +5,13 @@ from django.shortcuts import get_object_or_404
 from cart.forms import CartForm
 from .models import Category, Product
 from django.views.generic import ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-class ProductListView(ListView):
+class ProductListView(LoginRequiredMixin, ListView):
     model = Product
     template_name = 'list.html'  # 樣板路徑
+    login_url = '/accounts/login/'
+    success_url = '/'
     def get_context_data(self, **kwargs):
         cat = None
         cats = Category.objects.all()
@@ -23,10 +26,11 @@ class ProductListView(ListView):
         context["products"] = products
         return context
 
-class ProductDetailView(DetailView):
+class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = 'shop_detail.html'
-
+    login_url = '/accounts/login/'
+    success_url = '/'
     def get_context_data(self, **kwargs):
         id = self.kwargs.get('id')
         slug = self.kwargs.get('slug')
