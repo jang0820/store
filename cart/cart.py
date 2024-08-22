@@ -48,4 +48,4 @@ class Cart(object):
         return sum(item['num'] for item in self.cart.values())
 
     def get_tprice(self):
-        return sum(Decimal(item['tprice']) for item in self.cart.values())
+        return sum(Decimal(item['price'])*Decimal(item['num']) for item in self.cart.values())

@@ -18,6 +18,7 @@
       {% endfor %}
     </table>
     <p> 總金額{{ cart.get_tprice }}</p>
+    <p> 使用者{{ user.username }}擁有儲值金{{user.money}}</p>
   </div>
   <form method="post" class="order-form">
     {{ form.as_p }}
